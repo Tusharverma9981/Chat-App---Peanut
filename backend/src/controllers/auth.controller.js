@@ -1,6 +1,7 @@
 import { generateToken } from "../lib/utils.js";
-import User from "../models/user.model.js"
-import bcrypt from "bcryptjs"
+import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import cloudnary from "../lib/cloudnary.js";
 
 export const signup = async (req, res) => {
     const { fullName, email, password } = req.body;
@@ -86,5 +87,32 @@ export const logout = (req,res)=>{
 
 
 export const updateProfile = async (req,res)=>{
-  
+  try {
+    const {profilePic}=req.body;
+    const UserId = req.user._id;
+    if(!profilePic){
+      return res.status(400).json({message:"Profile pic is required"});
+    }
+
+    const uploadResponse = await cloudnary.uploader.upload(profilePic);
+    const uploadUser = await User.findByIdAndUpdate(
+      UserId,
+      {profilePic:uploadResponse.secure_url},
+      {new:true}
+    );
+
+    res.status(200).json(uploadUser);
+   } catch (error) {
+    console.log("error in update profile",error);
+    res.status(500).json({message:"Internal server error"});
+  }
 };
+
+export const checkAuth = (req,res)=>{
+  try {
+    res.status(200).json(req.User);
+  } catch (error) {
+    console.log("Error in checkAuth controller",error.message);
+    res.status(500).json({message:"Internal Server Error"});
+  }
+}
