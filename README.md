@@ -1,7 +1,7 @@
 
 # Peanut  chat-app
 
-**The Peanut Chat App**  
+**The Peanut full stack chat app**  
 
 Peanut is a dynamic, real-time chat application designed to bring people closer with its seamless communication features and modern design. Built with Socket.io for efficient and instant connectivity, Peanut redefines the way you interact with others. Here's a detailed look at what makes Peanut special:  
 
